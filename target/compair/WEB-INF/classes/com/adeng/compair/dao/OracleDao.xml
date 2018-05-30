@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.adeng.compair.multDao.oracleDao.OracleDao">
+	<resultMap id="orderCarMap" type="com.adeng.compair.entity.OrderCarEntity">
+		<!-- 订单主表 -->
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="ORDER_CODE" property="orderCode" jdbcType="VARCHAR" />
+		<result column="TRANSPORT_CODE" property="transportCode"
+			jdbcType="VARCHAR" />
+		<result column="CUSTOMER_ID" property="customerId" jdbcType="INTEGER" />
+		<result column="PICKUP_TIME" property="pickup_time" jdbcType="DATE" />
+		<result column="DELIVERY_TIME" property="delivery_time"
+			jdbcType="VARCHAR" />
+		<result column="PICKUP_LOCATION_ID" property="pickupLocationId"
+			jdbcType="INTEGER" />
+		<result column="DELIVERY_LOCATION_ID" property="deliveryLocationId"
+			jdbcType="INTEGER" />
+		<result column="CARRIER_ID" property="carrierId" jdbcType="INTEGER" />
+		<result column="ORDER_TYPE" property="orderType" jdbcType="VARCHAR" />
+		<result column="VERSION" property="version" jdbcType="VARCHAR" />
+		<result column="ORDER_PUBLISHED_TIME" property="orderPublishedTime"
+			jdbcType="VARCHAR" />
+		<result column="ORDER_SCHEDULING_TIME" property="orderSchedulingTime"
+			jdbcType="VARCHAR" />
+		<result column="ORDER_SHIPPING_TIME" property="orderShippingTime"
+			jdbcType="VARCHAR" />
+		<result column="ORDER_COMPLETE_TIME" property="orderCompleteTime"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerRC1" property="ExcelServerRC1"
+			jdbcType="VARCHAR" />
+		<result column="USER_ID" property="userTd" jdbcType="INTEGER" />
+		<result column="IS_LATE" property="isLate" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="DATE" />
+		<result column="CREATE_USER_ID" property="createUserId"
+			jdbcType="INTEGER" />
+		<result column="LAST_UPDATE_DATE" property="lastUpdateDate"
+			jdbcType="VARCHAR" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId"
+			jdbcType="INTEGER" />
+		<result column="ACTUAL_PICKUP_TIME" property="actualPickupTime"
+			jdbcType="DATE" />
+		<result column="ACTUAL_DELIVERY_TIME" property="actualDeliveryTime"
+			jdbcType="DATE" />
+		<result column="PICKUP_IS_LATE" property="pickupIsLate"
+			jdbcType="VARCHAR" />
+		<result column="IS_DAMAG" property="isDamag" jdbcType="VARCHAR" />
+		<result column="LOC_MATRIX_ENGINEER_ID" property="locMatrixEngineerId"
+			jdbcType="INTEGER" />
+		<result column="OPERATE_TYPE" property="operateType" jdbcType="VARCHAR" />
+		<result column="XML_VERSION" property="xmlVersion" jdbcType="VARCHAR" />
+		<result column="ORDER_DATE" property="orderDate" jdbcType="DATE" />
+		<result column="DOC_CUT_OFF_DATE" property="docCutOffDate"
+			jdbcType="DATE" />
+		<result column="ETD_DATE" property="etdDate" jdbcType="DATE" />
+		<result column="DELIVER_PORT" property="deliverPort" jdbcType="VARCHAR" />
+		<result column="MTI_NUMBER" property="mtiNumber" jdbcType="VARCHAR" />
+		<result column="PROJECT_ID" property="projectId" jdbcType="INTEGER" />
+		<result column="ORDER_PROJECT_GS" property="orderProjectGs"
+			jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="FORD_FILE_NAME" property="fordFileName"
+			jdbcType="VARCHAR" />
+		<result column="ITEM_ID" property="itemId" jdbcType="INTEGER" />
+		<result column="ORDER_PART_TYPE" property="orderPartType"
+			jdbcType="VARCHAR" />
+		<result column="ORDER_ROW_NUM" property="orderRowNum" jdbcType="VARCHAR" />
+		<result column="IS_CONFIRM" property="isConfirm" jdbcType="VARCHAR" />
+		<result column="IS_ADD_PART" property="isAddPart" jdbcType="VARCHAR" />
+		<result column="IS_SEND" property="isSend" jdbcType="VARCHAR" />
+		<result column="PUS_PICKUP_TIME" property="pusPickupTime"
+			jdbcType="DATE" />
+		<result column="PUS_DELIVERY_TIME" property="pusDeliveryTime"
+			jdbcType="DATE" />
+		<result column="SYLIFESHEN_NUM" property="sylifeshenNum"
+			jdbcType="VARCHAR" />
+		<result column="CC_LOCATION_ID" property="ccLocationId"
+			jdbcType="INTEGER" />
+		<result column="DLV_CONTACTNAME" property="dlvContactname"
+			jdbcType="VARCHAR" />
+		<result column="DLV_TEL" property="dlvTel" jdbcType="VARCHAR" />
+		<result column="DLV_ADDRESS" property="dlvAddress" jdbcType="VARCHAR" />
+		<result column="PIC_CONTACTNAME" property="picContactname"
+			jdbcType="VARCHAR" />
+		<result column="PIC_TEL" property="picTel" jdbcType="VARCHAR" />
+		<result column="PIC_ADDRESS" property="picAddress" jdbcType="VARCHAR" />
+		<result column="CC_ARRIVAL_TIME" property="ccArrivalTime"
+			jdbcType="DATE" />
+		<result column="CC_LEAVE_TIME" property="ccLeaveTime" jdbcType="DATE" />
+		<result column="CC_CODE" property="ccCode" jdbcType="VARCHAR" />
+		<result column="TRANSPORT_MODE" property="transportMode"
+			jdbcType="VARCHAR" />
+		<result column="ORDER_INFO_TYPE" property="orderInfoType"
+			jdbcType="VARCHAR" />
+		<result column="NEW_ORDER_ID" property="newOrderId" jdbcType="VARCHAR" />
+		<result column="DISPOSED_STATUS" property="disposedStatus"
+			jdbcType="VARCHAR" />
+		<result column="SHIPPERS_CONFIRM_STATUS" property="shippersConfirmStatus"
+			jdbcType="VARCHAR" />
+		<result column="PO_NO" property="poNo" jdbcType="VARCHAR" />
+		<result column="CLAIM_GOODS_TIME" property="claimGoodsTime"
+			jdbcType="DATE" />
+		<result column="PUS_STATUS" property="pusStatus" jdbcType="VARCHAR" />
+		<!-- 订单子表 -->
+		<result column="ID" property="idItm" jdbcType="INTEGER" />
+		<result column="ORDER_INFO_ID" property="orderInfoId" jdbcType="INTEGER" />
+		<result column="PART_REFERENCE" property="partReference"
+			jdbcType="VARCHAR" />
+		<result column="partName" property="PART_NAME" jdbcType="VARCHAR" />
+		<result column="PACKAGE_QTY" property="packageQty" jdbcType="INTEGER" />
+		<result column="QTY" property="qty" jdbcType="INTEGER" />
+		<result column="UNIT" property="unitl" jdbcType="VARCHAR" />
+		<result column="LENGTH" property="length" jdbcType="INTEGER" />
+		<result column="WIDTH" property="width" jdbcType="INTEGER" />
+		<result column="HEIGHT" property="height" jdbcType="INTEGER" />
+		<result column="AMOUNT_WEIGHT" property="amountWeight"
+			jdbcType="INTEGER" />
+		<result column="SUPPLIER_CODE" property="supplierCode"
+			jdbcType="VARCHAR" />
+		<result column="SUPPLIER_NAME" property="supplierName"
+			jdbcType="VARCHAR" />
+		<result column="REMARK" property="remarkItme" jdbcType="VARCHAR" />
+		<result column="PACKAGE_CODE" property="packageCode" jdbcType="VARCHAR" />
+		<result column="REAL_QTY" property="realQty" jdbcType="INTEGER" />
+		<result column="SOLID_RATE" property="solidRate" jdbcType="INTEGER" />
+		<result column="LIQUID_RATE" property="liquidRate" jdbcType="INTEGER" />
+		<result column="PART_CUBE" property="partCube" jdbcType="INTEGER" />
+		<result column="PALLET" property="pallet" jdbcType="INTEGER" />
+		<result column="FACT_PACKPAGES" property="factPackpages"
+			jdbcType="INTEGER" />
+		<result column="TRUCK_RATE" property="truckRate" jdbcType="INTEGER" />
+		<result column="IS_CONFIRM" property="isConfirmitme" jdbcType="VARCHAR" />
+		<result column="WEIGHT_RATE" property="weightRate" jdbcType="INTEGER" />
+		<result column="ASN_CODE" property="asnCode" jdbcType="VARCHAR" />
+		<result column="RECEIVE_DATE" property="receiveDate" jdbcType="VARCHAR" />
+		<result column="SYLIFESHEN_NUM" property="sylifeshenNumItme"
+			jdbcType="VARCHAR" />
+		<result column="VERSION_NUMBER" property="versionNumber"
+			jdbcType="INTEGER" />
+		<result column="REAL_TAKE_NUMBER" property="realTakeNumber"
+			jdbcType="INTEGER" />
+		<result column="DISPOSED_STATUS" property="disposedStatusItme"
+			jdbcType="VARCHAR" />
+		<result column="PO_ITEM_NO" property="poItemNo" jdbcType="VARCHAR" />
+		<result column="DOC_NUM" property="docNum" jdbcType="VARCHAR" />
+		<result column="PO_NO" property="poNoItme" jdbcType="VARCHAR" />
+
+		<!-- 车次主表 -->
+		<result column="日期" property="dates" jdbcType="DATE" />
+		<result column="承运商" property="commonCarrier" jdbcType="VARCHAR" />
+		<result column="车次号" property="trainNumber" jdbcType="VARCHAR" />
+		<result column="提货日期" property="deliveryDatel" jdbcType="DATE" />
+		<result column="起始地点" property="startingLocation" jdbcType="VARCHAR" />
+		<result column="任务开始时间" property="taskStartTime" jdbcType="DATE" />
+		<result column="任务结束时间" property="taskEndTime" jdbcType="DATE" />
+		<result column="计划车牌号" property="planLicensePlateNumber"
+			jdbcType="VARCHAR" />
+		<result column="实际车牌号" property="actualLicensePlateNumber"
+			jdbcType="VARCHAR" />
+		<result column="计划司机姓名" property="planDriverName" jdbcType="VARCHAR" />
+		<result column="实际司机姓名" property="actualDriverName" jdbcType="VARCHAR" />
+		<result column="计划司机手机号" property="planDriverPhone" jdbcType="VARCHAR" />
+		<result column="实际手机号" property="actualDriverPhone" jdbcType="VARCHAR" />
+		<result column="ExcelServerRCID" property="ExcelServerRCID"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerRC1" property="ExcelServerRC1"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerWIID" property="ExcelServerWIID"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerRTID" property="ExcelServerRTID"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerRN" property="ExcelServerRN"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerCN" property="ExcelServerCN"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerCHG" property="ExcelServerCHG"
+			jdbcType="VARCHAR" />
+		<result column="处理状态" property="processingState" jdbcType="VARCHAR" />
+		<result column="处理描述" property="processingDescription"
+			jdbcType="VARCHAR" />
+		<!-- 车次子表 -->
+		<result column="订单号" property="orderCode" jdbcType="VARCHAR" />
+		<result column="零件号" property="partReference" jdbcType="VARCHAR" />
+		<result column="工厂" property="plant" jdbcType="VARCHAR" />
+		<result column="供应商号" property="supplier" jdbcType="VARCHAR" />
+		<result column="供应商名称" property="supplierName" jdbcType="VARCHAR" />
+		<result column="提货站点" property="pickUpSite" jdbcType="VARCHAR" />
+		<result column="计划提货时间" property="plannedPickUpTime" jdbcType="DATE" />
+		<result column="实际到达提货点时间" property="actualArrivalTime"
+			jdbcType="DATE" />
+		<result column="实际离开提货点时间" property="actualDepartureTime"
+			jdbcType="DATE" />
+		<result column="零件名称" property="partName" jdbcType="VARCHAR" />
+		<result column="料架类型" property="materialRackType" jdbcType="VARCHAR" />
+		<result column="计划数量" property="qty" jdbcType="INTEGER" />
+		<result column="计划箱数" property="numberPlannedBoxes" jdbcType="INTEGER" />
+		<result column="计划立方" property="planCubic" jdbcType="DECIMAL" />
+		<result column="提货数量" property="pickUpQuantity" jdbcType="INTEGER" />
+		<result column="提货箱数" property="numberPickBoxes" jdbcType="INTEGER" />
+		<result column="实提立方" property="realCubic" jdbcType="DECIMAL" />
+		<result column="卸货点" property="unloadingPoint" jdbcType="VARCHAR" />
+		<result column="需求时间" property="requiredTime" jdbcType="DATE" />
+		<result column="实际到达卸货点时间" property="practicalArriveUnloadTime"
+			jdbcType="DATE" />
+		<result column="实际离开卸货点时间" property="practicalLeaveUnloadTime"
+			jdbcType="DATE" />
+		<result column="计划员" property="schemer" jdbcType="VARCHAR" />
+		<result column="运输管理员" property="transportManager" jdbcType="DECIMAL" />
+		<result column="长" property="longs" jdbcType="INTEGER" />
+		<result column="宽" property="wide" jdbcType="INTEGER" />
+		<result column="高" property="tall" jdbcType="INTEGER" />
+		<result column="ExcelServerRCID" property="excelServerRCIDDetail"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerRC1" property="ExcelServerRC1Detail"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerWIID" property="ExcelServerWIIDDetail"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerRTID" property="ExcelServerRTIDDetail"
+			jdbcType="VARCHAR" />
+		<result column="ExcelServerRN" property="ExcelServerRNDetail"
+			jdbcType="INTEGER" />
+		<result column="ExcelServerCN" property="ExcelServerCNDetail"
+			jdbcType="INTEGER" />
+		<result column="ExcelServerCHG" property="ExcelServerCHGDetail"
+			jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 车牌 -->
+	<resultMap id="truckMap" type="com.adeng.compair.entity.Truck">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="LICENSE_PLATE" property="licensePlate"
+			jdbcType="VARCHAR" />
+		<result column="TRUCK_TYPE" property="truckType" jdbcType="VARCHAR" />
+		<result column="GPS_NUMBER" property="gpsNumber" jdbcType="VARCHAR" />
+		<result column="CARRIER_ID" property="carrierId" jdbcType="VARCHAR" />
+		<result column="LENGTH" property="length" jdbcType="INTEGER" />
+		<result column="WIDTH" property="width" jdbcType="INTEGER" />
+		<result column="HEIGHT" property="height" jdbcType="INTEGER" />
+		<result column="TONNAGE" property="tonnage" jdbcType="INTEGER" />
+		<result column="IS_VALID" property="isValid" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="DATE" />
+		<result column="CREATE_USER_ID" property="createUserId"
+			jdbcType="INTEGER" />
+		<result column="LAST_UPDATE_DATE" property="lastUpdateDate"
+			jdbcType="DATE" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId"
+			jdbcType="INTEGER" />
+		<result column="DRIVER_NAME" property="driverName" jdbcType="VARCHAR" />
+		<result column="DRIVER_PHONE" property="driverPhone" jdbcType="VARCHAR" />
+		<result column="TRUCK_STATUS" property="truckStatus" jdbcType="VARCHAR" />
+		<result column="TRANS_TYPE" property="transType" jdbcType="VARCHAR" />
+		<result column="IS_STATE" property="isState" jdbcType="VARCHAR" />
+		<result column="IS_SEND" property="isSend" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 站点 -->
+	<resultMap id="iocMap" type="com.adeng.compair.entity.Ioc">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="LICENSE_PLATE" property="locationCode"
+			jdbcType="VARCHAR" />
+		<result column="TRUCK_TYPE" property="locationName" jdbcType="VARCHAR" />
+		<result column="GPS_NUMBER" property="address" jdbcType="VARCHAR" />
+		<result column="CARRIER_ID" property="contactname" jdbcType="VARCHAR" />
+		<result column="LENGTH" property="tel" jdbcType="VARCHAR" />
+		<result column="WIDTH" property="mobile" jdbcType="VARCHAR" />
+		<result column="HEIGHT" property="isValid" jdbcType="VARCHAR" />
+		<result column="TONNAGE" property="createDate" jdbcType="DATE" />
+		<result column="IS_VALID" property="createUserId" jdbcType="INTEGER" />
+		<result column="CREATE_DATE" property="lastUpdateDate"
+			jdbcType="DATE" />
+		<result column="CREATE_USER_ID" property="lastUpdateUserId"
+			jdbcType="INTEGER" />
+		<result column="LAST_UPDATE_DATE" property="locationtype"
+			jdbcType="VARCHAR" />
+		<result column="LAST_UPDATE_USER_ID" property="city" jdbcType="VARCHAR" />
+		<result column="DRIVER_NAME" property="remark" jdbcType="VARCHAR" />
+		<result column="DRIVER_PHONE" property="province" jdbcType="VARCHAR" />
+		<result column="TRUCK_STATUS" property="district" jdbcType="VARCHAR" />
+		<result column="TRANS_TYPE" property="locType" jdbcType="VARCHAR" />
+		<result column="IS_STATE" property="source" jdbcType="VARCHAR" />
+		<result column="IS_SEND" property="picTime" jdbcType="VARCHAR" />
+		<result column="IS_STATE" property="dlvTime" jdbcType="VARCHAR" />
+		<result column="IS_SEND" property="earlyDate" jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 车次 -->
+	<resultMap id="bookingSheetMap" type="com.adeng.compair.entity.BookingSheet">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="BOOKING_SHEET_NUM" property="bookingSheetNum"
+			jdbcType="VARCHAR" />
+		<result column="BOOKING_SHEET_TYPE" property="bookingSheetype"
+			jdbcType="VARCHAR" />
+		<result column="TRUCK_ID" property="truckId" jdbcType="INTEGER" />
+		<result column="DRIVER_NAME" property="driverName" jdbcType="VARCHAR" />
+		<result column="DRIVER_PHONE" property="driverPhone" jdbcType="VARCHAR" />
+		<result column="BOOKING_SHEET_DATE" property="bookingSheetDate"
+			jdbcType="DATE" />
+		<result column="IS_VALUE" property="isValue" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="DATE" />
+		<result column="CREATE_USER_ID" property="createUserId"
+			jdbcType="INTEGER" />
+		<result column="LAST_UPDATE_DATE" property="lastUpdateDate"
+			jdbcType="DATE" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId"
+			jdbcType="INTEGER" />
+		<result column="CARRIER_ID" property="carrierId" jdbcType="INTEGER" />
+		<result column="GPS_NUMBER" property="gpsNumber" jdbcType="VARCHAR" />
+		<result column="ROUTE_ID" property="routeId" jdbcType="INTEGER" />
+		<result column="MONITOR_START_TIME" property="monitorStartTime"
+			jdbcType="DATE" />
+		<result column="MONITOR_END_TIME" property="monitorEndTime"
+			jdbcType="DATE" />
+		<result column="IS_MONITOR" property="isMonitor" jdbcType="VARCHAR" />
+		<result column="DATA_FROM" property="dataFrom" jdbcType="VARCHAR" />
+		<result column="BOOKING_ROUTE_ID" property="bookingRouteId"
+			jdbcType="INTEGER" />
+		<result column="RUN" property="run" jdbcType="INTEGER" />
+		<result column="TRUCK_TYPE_ID" property="earlyDate" jdbcType="INTEGER" />
+		<result column="CUBEIQ_RATE" property="earlyDate" jdbcType="INTEGER" />
+		<result column="SYNC_FLAG" property="syncFlag" jdbcType="VARCHAR" />
+		<result column="WEIGHT_RATE" property="weightRate" jdbcType="INTEGER" />
+		<result column="P_D_R_TYPE" property="pdrType" jdbcType="VARCHAR" />
+		<result column="SOLID_RATE_FORD" property="solidRateFord"
+			jdbcType="INTEGER" />
+		<result column="IS_SEND" property="isSend" jdbcType="VARCHAR" />
+		<result column="IS_SEND_CQ" property="isSendCq" jdbcType="VARCHAR" />
+		<result column="TRANS_TYPE" property="transType" jdbcType="VARCHAR" />
+		<result column="CONTAINER_NUM" property="containerNum"
+			jdbcType="VARCHAR" />
+		<result column="CJLR_STATUS" property="cjlrStatus" jdbcType="INTEGER" />
+		<result column="TAILAFTER_TYPE" property="tailafterType"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 承运商 -->
+	<resultMap id="carrierMap" type="com.adeng.compair.entity.Carrier">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="CARRIER_CODE" property="carrierCode" jdbcType="VARCHAR" />
+		<result column="CARRIER_NAME" property="carrierName" jdbcType="VARCHAR" />
+		<result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+		<result column="CONTACTNAME1" property="contactname1" jdbcType="VARCHAR" />
+		<result column="TEL1" property="tel1" jdbcType="VARCHAR" />
+		<result column="CONTACTNAME2" property="contactname2" jdbcType="VARCHAR" />
+		<result column="TEL2" property="tel2" jdbcType="VARCHAR" />
+		<result column="CONTACTNAME3" property="contactname3" jdbcType="VARCHAR" />
+		<result column="TEL3" property="tel3" jdbcType="VARCHAR" />
+		<result column="IS_VALID" property="isValid" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="DATE" />
+		<result column="CREATE_USER_ID" property="createUserId"
+			jdbcType="INTEGER" />
+		<result column="LAST_UPDATE_DATE" property="lastUpdateDate"
+			jdbcType="DATE" />
+		<result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId"
+			jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="orderItmeMap" type="com.adeng.compair.entity.OrderInfoItem">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="ORDER_INFO_ID" property="orderInfoId" jdbcType="INTEGER" />
+		<result column="PART_REFERENCE" property="partReference" jdbcType="VARCHAR" />
+		<result column="partName" property="PART_NAME" jdbcType="VARCHAR" />
+		<result column="PACKAGE_QTY" property="packageQty" jdbcType="INTEGER" />
+		<result column="QTY" property="qty"
+			jdbcType="INTEGER" />
+		<result column="UNIT" property="unitl"
+			jdbcType="VARCHAR" />
+		<result column="LENGTH" property="length"
+			jdbcType="INTEGER" />
+		<result column="WIDTH" property="width" jdbcType="INTEGER" />
+		<result column="HEIGHT" property="height"
+			jdbcType="INTEGER" />
+		<result column="AMOUNT_WEIGHT" property="amountWeight" jdbcType="INTEGER" />
+		<result column="SUPPLIER_CODE" property="supplierCode" jdbcType="VARCHAR" />
+		<result column="SUPPLIER_NAME" property="supplierName"
+			jdbcType="VARCHAR" />
+		<result column="REMARK" property="remark" jdbcType="VARCHAR" />
+		<result column="PACKAGE_CODE" property="packageCode" jdbcType="VARCHAR" />
+		<result column="REAL_QTY" property="realQty" jdbcType="INTEGER" />
+		<result column="SOLID_RATE" property="solidRate"
+			jdbcType="INTEGER" />
+		<result column="LIQUID_RATE" property="liquidRate" jdbcType="INTEGER" />
+		<result column="PART_CUBE" property="partCube" jdbcType="INTEGER" />
+		<result column="PALLET" property="pallet" jdbcType="INTEGER" />
+		<result column="FACT_PACKPAGES" property="factPackpages" jdbcType="INTEGER" />
+		<result column="TRUCK_RATE" property="truckRate" jdbcType="INTEGER" />
+		<result column="IS_CONFIRM" property="isConfirm" jdbcType="VARCHAR" />
+		<result column="WEIGHT_RATE" property="weightRate" jdbcType="INTEGER" />
+		<result column="ASN_CODE" property="asnCode" jdbcType="VARCHAR" />
+		<result column="RECEIVE_DATE" property="receiveDate" jdbcType="VARCHAR" />
+		<result column="SYLIFESHEN_NUM" property="sylifeshenNum" jdbcType="VARCHAR" />
+		<result column="VERSION_NUMBER" property="versionNumber" jdbcType="INTEGER" />
+		<result column="REAL_TAKE_NUMBER" property="realTakeNumber" jdbcType="INTEGER" />
+		<result column="DISPOSED_STATUS" property="disposedStatus" jdbcType="VARCHAR" />
+		<result column="PO_ITEM_NO" property="poItemNo" jdbcType="VARCHAR" />
+		<result column="DOC_NUM" property="docNum" jdbcType="VARCHAR" />
+		<result column="PO_NO" property="poNoItme" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="booksheetTripMap" type="com.adeng.compair.entity.BookSheetTrip" >
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="BOOK_SHEET_ID" property="bookSheetId" jdbcType="INTEGER" />
+    <result column="TRIP_ID" property="tripId" jdbcType="VARCHAR" />
+    <result column="ORDER_ID" property="orderId" jdbcType="INTEGER" />
+    <result column="PICKUP_LOCATION_ID" property="pickupLocationId" jdbcType="INTEGER" />
+    <result column="DELIVERY_LOCATION_ID" property="deliveryLocationId" jdbcType="INTEGER" />
+    <result column="PICKUP_ARRIVE_TIME" property="pickupArriveTime" jdbcType="DATE" />
+    <result column="PICKUP_LEAVE_TIME" property="pickupLeaveTime" jdbcType="DATE" />
+    <result column="DELIVERY_ARRIVE_TIME" property="deliveryArriveTime" jdbcType="DATE" />
+    <result column="DELIVERY_LEAVE_TIME" property="deliveryLeaveTime" jdbcType="DATE" />
+    <result column="ROUTE_ID" property="routeId" jdbcType="INTEGER" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="DATE" />
+    <result column="CREATE_USER_ID" property="createUserId" jdbcType="INTEGER" />
+    <result column="LAST_UPDATE_DATE" property="lastUpdateDate" jdbcType="DATE" />
+    <result column="LAST_UPDATE_USER_ID" property="lastUpdateUserId" jdbcType="INTEGER" />
+    <result column="SEQ" property="seq" jdbcType="INTEGER" />
+    <result column="LCM_LOC_ID" property="lcmLocId" jdbcType="INTEGER" />
+    <result column="LCM_ARRIVE_TIME" property="lcmArriveTime" jdbcType="DATE" />
+    <result column="LCM_LEAVE_TIME" property="lcmLeaveTime" jdbcType="DATE" />
+    <result column="DISTANCE" property="distance" jdbcType="INTEGER" />
+  </resultMap>
+	
+	<resultMap id="compairMap" type="com.adeng.compair.entity.CompairClass">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="QTY" property="qty" jdbcType="INTEGER" />
+		<result column="PART_REFERENCE" property="partReference" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 根据订单号查询零件信息 -->
+	<select id="queryOrderInfo" resultMap="orderCarMap" parameterType="com.adeng.compair.entity.OrderCarEntity">
+		    select t.part_reference, sum(t.qty) qty
+			  from order_info_item t
+			 where t.order_info_id =
+			       (select m.id
+			          from order_info m
+			         where m.order_code = #{orderCode}
+			           and (m.ORDER_TYPE = '0' or m.ORDER_TYPE = '1'))
+			  and t.part_reference = #{partReference}
+			 group by t.part_reference         
+	</select>
+	
+	<!-- 根据订单号查询零件条数 -->
+	<select id="queryOrderCount" resultMap="compairMap" parameterType="com.adeng.compair.entity.OrderCarEntity">
+		select m.PART_REFERENCE, sum(m.qty) QTY
+		  from order_info_item m
+		 where m.order_info_id in 
+		 <foreach item="item" collection="orderIds" index="index" open="("  
+                separator="," close=")">  
+                #{item}  
+         </foreach>
+         group by m.part_reference
+         having sum(m.qty) != 0
+	</select>
+	
+	<!-- 根据订单号查询订单id -->
+	<select id="queryOrderIdByOrderCode" resultType="int"  parameterType="com.adeng.compair.entity.OrderCarEntity">
+		     select t.id
+               from order_info t
+              where t.order_code = #{orderCode}
+              and t.order_type in ('0', '1')
+              and rownum = 1
+	</select>
+
+	<!-- 根据 处理状态查询车次主表和车次主表 -->
+	<select id="selectOrder" resultMap="orderCarMap">
+		select o.id,
+		o.order_code,
+		o.Pickup_Time,
+		o.PICKUP_LOCATION_ID,
+		o.Delivery_Time,
+		o.CARRIER_ID,
+		i.id,
+		i.Part_Reference,
+		i.Qty,
+		i.Package_Code,
+		i.Package_Qty
+		from order_info o
+		left join order_info_item i
+		on (o.id = i.order_info_id)
+		where o.ORDER_TYPE = '0'
+		or o.ORDER_TYPE = '1'
+	</select>
+
+	<!-- 查询卡车 -->
+	<select id="selectLicensePlatel" resultMap="truckMap">
+		select id,LICENSE_PLATE from truck where LICENSE_PLATE = #{licensePlate} and is_valid = 1
+	</select>
+
+	<!-- 查询站点 -->
+	<select id="selectCountLocation" resultMap="iocMap">
+		select id,LOCATION_NAME from loc where LOCATION_CODE = #{startingLocation} and is_valid = '1'
+	</select>
+
+	<!-- 查询车次 -->
+	<select id="selectCountSheet" resultMap="bookingSheetMap">
+		select
+		id,BOOKING_SHEET_NUM from booking_sheet where BOOKING_SHEET_NUM =
+		#{trainNumber}
+	</select>
+	
+	<!-- 根据location_name查找id -->
+	<select id="queryLocInfo" resultMap="iocMap" parameterType="com.adeng.compair.entity.OrderCarEntity">
+		select id from loc u where u.location_name = #{unloadingPoint} and u.is_valid = '1' and rownum = 1
+	</select>
+
+	<!-- 查询承运商是否存在 -->
+	<select id="selectCarrier" resultMap="carrierMap">
+		select id, carrier_code from carrier
+		where carrier_name = #{carrierId}
+		and is_valid = '1'
+	</select>
+
+	<!-- 查询订单的零件总数 -->
+	<select id="countOrderCode" resultType="java.lang.Integer">
+		select count(*)
+		from order_info o left join order_info_item i on(o.id=i.order_info_id)
+		<where>
+			(o.ORDER_TYPE='0' or o.ORDER_TYPE='1') and o.order_code=#{orderCode}
+		</where>
+	</select>
+
+	<!-- 获取对应订单ID -->
+	<select id="getOrderId" resultType="java.lang.Integer">
+		select seq_booking_sheet.nextval from dual
+	</select>
+
+	<!-- 插入到路单对应订单 -->
+	<insert id="insertBookingSheetOrder" parameterType="com.adeng.compair.entity.BookingSheetOrder">
+		insert into BOOKING_SHEET_ORDER (ID, BOOKING_SHEET_ID, ORDER_ID,
+		IS_LATE, ORDER_TYPE, ORDER_SCHEDULING_TIME,
+		ORDER_SHIPPING_TIME, ORDER_COMPLETE_TIME, ACTUAL_DELIVERY_TIME,
+		IS_DAMAG, ACTUAL_PICKUP_TIME)
+		values (seq_booking_sheet_order.nextval, #{bookingSheetId,jdbcType=INTEGER},
+		#{orderId,jdbcType=INTEGER},
+		#{isLate,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR},
+		#{orderSchedulingTime,jdbcType=VARCHAR},
+		#{orderShippingTime,jdbcType=VARCHAR},
+		#{orderCompleteTime,jdbcType=VARCHAR},
+		#{actualDeliveryTime,jdbcType=VARCHAR},
+		#{isDamag,jdbcType=VARCHAR}, #{actualPickupTime,jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 插入到路单站点时间 -->
+	<insert id="insertBookSheetTrip" parameterType="com.adeng.compair.entity.BookSheetTrip">
+		<selectKey keyProperty="id" resultType="java.lang.Integer"
+			order="BEFORE">
+			SELECT seq_book_sheet_trip.nextval FROM dual
+		</selectKey>
+		insert into BOOK_SHEET_TRIP (ID, BOOK_SHEET_ID, TRIP_ID,
+		ORDER_ID, PICKUP_LOCATION_ID, DELIVERY_LOCATION_ID,
+		PICKUP_ARRIVE_TIME, PICKUP_LEAVE_TIME,
+		DELIVERY_ARRIVE_TIME, DELIVERY_LEAVE_TIME,
+		ROUTE_ID, CREATE_DATE, CREATE_USER_ID,
+		LAST_UPDATE_DATE, LAST_UPDATE_USER_ID, SEQ,
+		LCM_LOC_ID, LCM_ARRIVE_TIME, LCM_LEAVE_TIME,
+		DISTANCE)
+		values (#{id,jdbcType=INTEGER}, #{bookSheetId,jdbcType=INTEGER},
+		#{tripId,jdbcType=VARCHAR},
+		#{orderId,jdbcType=INTEGER}, #{pickupLocationId,jdbcType=INTEGER},
+		#{deliveryLocationId,jdbcType=INTEGER},
+		#{pickupArriveTime,jdbcType=DATE}, #{pickupLeaveTime,jdbcType=DATE},
+		#{deliveryArriveTime,jdbcType=DATE},
+		#{deliveryLeaveTime,jdbcType=DATE},
+		#{routeId,jdbcType=INTEGER}, #{createDate,jdbcType=DATE}, #{createUserId,jdbcType=INTEGER},
+		#{lastUpdateDate,jdbcType=DATE}, #{lastUpdateUserId,jdbcType=INTEGER},
+		#{seq,jdbcType=INTEGER},
+		#{lcmLocId,jdbcType=INTEGER}, #{lcmArriveTime,jdbcType=DATE}, #{lcmLeaveTime,jdbcType=DATE},
+		#{distance,jdbcType=INTEGER})
+	</insert>
+
+	<!-- 插入 -->
+	<insert id="insertBookingSeet" parameterType="com.adeng.compair.entity.BookingSheet">
+		<selectKey keyProperty="id" resultType="java.lang.Integer"
+			order="BEFORE">
+			SELECT seq_booking_sheet.nextval FROM dual
+		</selectKey>
+		insert into BOOKING_SHEET (ID, BOOKING_SHEET_NUM, BOOKING_SHEET_TYPE,
+		TRUCK_ID, DRIVER_NAME, DRIVER_PHONE,
+		BOOKING_SHEET_DATE, IS_VALUE, CREATE_DATE,
+		CREATE_USER_ID, LAST_UPDATE_DATE, LAST_UPDATE_USER_ID,
+		CARRIER_ID, GPS_NUMBER, ROUTE_ID,
+		MONITOR_START_TIME, MONITOR_END_TIME, IS_MONITOR,
+		DATA_FROM, BOOKING_ROUTE_ID, RUN,
+		TRUCK_TYPE_ID, CUBEIQ_RATE, SYNC_FLAG,
+		WEIGHT_RATE, P_D_R_TYPE, SOLID_RATE_FORD,
+		IS_SEND, IS_SEND_CQ, TRANS_TYPE,
+		CONTAINER_NUM, CJLR_STATUS, TAILAFTER_TYPE
+		)
+		values (#{id,jdbcType=INTEGER}, #{bookingSheetNum,jdbcType=VARCHAR},
+		#{bookingSheetype,jdbcType=VARCHAR},
+		#{truckId,jdbcType=INTEGER}, #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR},
+		#{bookingSheetDate,jdbcType=DATE}, #{isValue,jdbcType=VARCHAR},
+		#{createDate,jdbcType=DATE},
+		#{createUserId,jdbcType=INTEGER}, #{lastUpdateDate,jdbcType=TIMESTAMP},
+		#{lastUpdateUserId,jdbcType=INTEGER},
+		#{carrierId,jdbcType=INTEGER}, #{gpsNumber,jdbcType=VARCHAR}, #{routeId,jdbcType=INTEGER},
+		#{monitorStartTime,jdbcType=DATE}, #{monitorEndTime,jdbcType=DATE},
+		#{isMonitor,jdbcType=VARCHAR},
+		#{dataFrom,jdbcType=VARCHAR}, #{bookingRouteId,jdbcType=INTEGER}, #{run,jdbcType=INTEGER},
+		#{truckTypeId,jdbcType=INTEGER}, #{cubeiqRate,jdbcType=INTEGER},
+		#{syncFlag,jdbcType=VARCHAR},
+		#{weightRate,jdbcType=INTEGER}, #{pdrType,jdbcType=VARCHAR}, #{solidRateFord,jdbcType=INTEGER},
+		#{isSend,jdbcType=VARCHAR}, #{isSendCq,jdbcType=VARCHAR},
+		#{transType,jdbcType=VARCHAR},
+		#{containerNum,jdbcType=VARCHAR}, #{cjlrStatus,jdbcType=VARCHAR}, #{tailafterType,jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+	<update id="UpdateOrderType2" parameterType="int">
+		update order_info set order_type='kk' where id = #{orderCode} 
+	</update>
+	
+	<!-- 修改订单表的状态 -->
+	<update id="UpdateOrderType" parameterType="int">
+		update order_info set order_type='2' where id = #{orderCode} 
+	</update>
+
+	<!-- 根据主表ID查询子表ID -->
+	<select id="selectById" resultMap="orderItmeMap" parameterType="int">
+		select * from order_info_item where ORDER_INFO_ID=#{orderid}
+	</select>
+
+	<!-- 修改数量 -->
+	<update id="updatePart" parameterType="java.util.Map">
+		update order_info_item
+		<set>
+			<if test="qty != null">
+				QTY = #{qty,jdbcType=INTEGER},
+			</if>
+		</set>
+		<where>
+			id=#{idItm}
+		</where>
+	</update>
+	
+	<!-- 查询bookingSheetOrder绑定的orderID是否已存在 -->
+	<select id="queryCountBookingSheetOrder" resultType="int" parameterType="com.adeng.compair.entity.OrderCarEntity">
+		select count(*) from BOOKING_SHEET_ORDER t where t.ORDER_ID = #{id}
+	</select>
+	
+	<!-- 拆子表 -->
+	 <insert id="insertOrderItme" parameterType="com.adeng.compair.entity.OrderInfoItem" >
+    insert into ORDER_INFO_ITEM (ID, ORDER_INFO_ID, PART_REFERENCE, 
+      PART_NAME, PACKAGE_QTY, QTY, 
+      UNIT, LENGTH, WIDTH, 
+      HEIGHT, AMOUNT_WEIGHT, SUPPLIER_CODE, 
+      SUPPLIER_NAME, REMARK, PACKAGE_CODE, 
+      REAL_QTY, SOLID_RATE, LIQUID_RATE, 
+      PART_CUBE, PALLET, FACT_PACKPAGES, 
+      TRUCK_RATE, IS_CONFIRM, WEIGHT_RATE, 
+      ASN_CODE, RECEIVE_DATE, SYLIFESHEN_NUM, 
+      VERSION_NUMBER, REAL_TAKE_NUMBER, DISPOSED_STATUS, 
+      PO_ITEM_NO, DOC_NUM, PO_NO
+      )
+    values(seq_order_info_item.nextval, #{orderInfoId,jdbcType=INTEGER}, #{partReference,jdbcType=VARCHAR}, 
+      #{partName,jdbcType=VARCHAR}, #{packageQty,jdbcType=INTEGER}, #{qty,jdbcType=INTEGER}, 
+      #{unit,jdbcType=VARCHAR}, #{length,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
+      #{height,jdbcType=INTEGER}, #{amountWeight,jdbcType=INTEGER}, #{supplierCode,jdbcType=VARCHAR}, 
+      #{supplierName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{packageCode,jdbcType=VARCHAR}, 
+      #{realQty,jdbcType=INTEGER}, #{solidRate,jdbcType=INTEGER}, #{liquidRate,jdbcType=INTEGER}, 
+      #{partCube,jdbcType=INTEGER}, #{pallet,jdbcType=INTEGER}, #{factPackpages,jdbcType=INTEGER}, 
+      #{truckRate,jdbcType=INTEGER}, #{isConfirm,jdbcType=VARCHAR}, #{weightRate,jdbcType=DECIMAL}, 
+      #{asnCode,jdbcType=VARCHAR}, #{receiveDate,jdbcType=VARCHAR}, #{sylifeshenNum,jdbcType=VARCHAR}, 
+      #{versionNumber,jdbcType=INTEGER}, #{realTakeNumber,jdbcType=INTEGER}, #{disposedStatus,jdbcType=CHAR}, 
+      #{poItemNo,jdbcType=VARCHAR}, #{docNum,jdbcType=VARCHAR}, #{poNo,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <!-- 保存路单信息 -->
+  <insert id="saveBookingSheet" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  	<selectKey keyProperty="id" resultType="java.lang.Integer" order="BEFORE">
+		SELECT  seq_booking_sheet.nextval FROM dual
+	</selectKey>
+		insert into BOOKING_SHEET (ID, BOOKING_SHEET_NUM, BOOKING_SHEET_TYPE, 
+	      TRUCK_ID, DRIVER_NAME, DRIVER_PHONE, 
+	      BOOKING_SHEET_DATE, IS_VALUE, CREATE_DATE, 
+	      CREATE_USER_ID, LAST_UPDATE_DATE, LAST_UPDATE_USER_ID, 
+	      CARRIER_ID, GPS_NUMBER, ROUTE_ID, 
+	      MONITOR_START_TIME, MONITOR_END_TIME, IS_MONITOR, 
+	      DATA_FROM
+	      )
+	    values (#{id,jdbcType=INTEGER}, #{trainNumber,jdbcType=VARCHAR}, '2', 
+	      #{truckId},
+	      #{planDriverName,jdbcType=VARCHAR}, #{planDriverPhone,jdbcType=VARCHAR}, 
+	      to_date(#{dates,jdbcType=VARCHAR}, 'yyyy-MM-dd hh24:mi:ss'), '1', sysdate, 
+	      '0', sysdate, 0, 
+	      #{carrierId,jdbcType=INTEGER}, '', '', 
+	      '', '', '0', 
+	      ''
+	      )
+  </insert>
+  
+  <!-- 保存路单对应订单信息   and (m.ORDER_TYPE = '0' or m.ORDER_TYPE = '1')-->
+  <insert id="saveBookingSheetOrder" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  		insert into BOOKING_SHEET_ORDER (ID, BOOKING_SHEET_ID, ORDER_ID, 
+	      IS_LATE, ORDER_TYPE, ORDER_SCHEDULING_TIME, 
+	      ORDER_SHIPPING_TIME, ORDER_COMPLETE_TIME, ACTUAL_DELIVERY_TIME, 
+	      IS_DAMAG, ACTUAL_PICKUP_TIME)
+	    values (seq_booking_sheet_order.nextval, #{bookingSheetID,jdbcType=INTEGER}, 
+		  #{id}, 
+	      '', 2, sysdate, 
+	      '', '', '', 
+	      '', '')
+  </insert>
+  
+  <!-- 保存路单站点时间   -->
+  <insert id="saveBookingSheetTrip" parameterType="com.adeng.compair.entity.OrderCarEntity">
+	    insert into BOOK_SHEET_TRIP (ID, BOOK_SHEET_ID, TRIP_ID, 
+	      ORDER_ID, PICKUP_LOCATION_ID, DELIVERY_LOCATION_ID, 
+	      PICKUP_ARRIVE_TIME, PICKUP_LEAVE_TIME, 
+	      DELIVERY_ARRIVE_TIME, DELIVERY_LEAVE_TIME, 
+	      ROUTE_ID, CREATE_DATE, CREATE_USER_ID, 
+	      LAST_UPDATE_DATE, LAST_UPDATE_USER_ID, SEQ, 
+	      LCM_LOC_ID, LCM_ARRIVE_TIME, LCM_LEAVE_TIME, 
+	      DISTANCE)
+	    values (seq_book_sheet_trip.nextval, #{bookingSheetID,jdbcType=INTEGER}, '', 
+	     #{id,jdbcType=INTEGER},#{pickupLocationId,jdbcType=INTEGER},#{deliveryLocationId,jdbcType=VARCHAR}, 
+		  to_date(#{pickup_time,jdbcType=VARCHAR}, 'yyyy-MM-dd hh24:mi:ss'),to_date(#{pickup_time,jdbcType=VARCHAR}, 'yyyy-MM-dd hh24:mi:ss'), 
+	      to_date(#{delivery_time,jdbcType=VARCHAR}, 'yyyy-MM-dd hh24:mi:ss'), to_date(#{delivery_time,jdbcType=VARCHAR}, 'yyyy-MM-dd hh24:mi:ss'), 
+	      '', sysdate, 0, 
+	      sysdate, 0, 0, 
+	      #{iocId,jdbcType=INTEGER}, to_date(#{taskStartTime,jdbcType=VARCHAR}, 'yyyy-MM-dd hh24:mi:ss'), to_date(#{taskEndTime,jdbcType=VARCHAR}, 'yyyy-MM-dd hh24:mi:ss'), 
+	      ''
+	      )
+  </insert>
+  
+  <!-- 生成主订单的拆分单 -->
+  <insert id="insertNewOrder" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  	<selectKey keyProperty="id" resultType="java.lang.Integer" order="BEFORE">
+		SELECT  seq_order_info.nextval FROM dual
+	</selectKey>
+		insert into order_info
+			  (ID,
+			   ORDER_CODE,
+			   TRANSPORT_CODE,
+			   CUSTOMER_ID,
+			   PICKUP_TIME,
+			   DELIVERY_TIME,
+			   PICKUP_LOCATION_ID,
+			   DELIVERY_LOCATION_ID,
+			   CARRIER_ID,
+			   ORDER_TYPE,
+			   VERSION,
+			   ORDER_PUBLISHED_TIME,
+			   ORDER_SCHEDULING_TIME,
+			   ORDER_SHIPPING_TIME,
+			   ORDER_COMPLETE_TIME,
+			   USER_ID,
+			   IS_LATE,
+			   CREATE_DATE,
+			   CREATE_USER_ID,
+			   LAST_UPDATE_DATE,
+			   LAST_UPDATE_USER_ID,
+			   ACTUAL_PICKUP_TIME,
+			   ACTUAL_DELIVERY_TIME,
+			   PICKUP_IS_LATE,
+			   IS_DAMAG,
+			   LOC_MATRIX_ENGINEER_ID,
+			   OPERATE_TYPE,
+			   XML_VERSION,
+			   ORDER_DATE,
+			   DOC_CUT_OFF_DATE,
+			   ETD_DATE,
+			   DELIVER_PORT,
+			   MTI_NUMBER,
+			   PROJECT_ID,
+			   ORDER_PROJECT_GS,
+			   REMARK,
+			   FORD_FILE_NAME,
+			   ITEM_ID,
+			   ORDER_PART_TYPE,
+			   ORDER_ROW_NUM,
+			   IS_CONFIRM,
+			   IS_ADD_PART,
+			   IS_SEND,
+			   PUS_PICKUP_TIME,
+			   PUS_DELIVERY_TIME,
+			   SYLIFESHEN_NUM,
+			   CC_LOCATION_ID,
+			   DLV_CONTACTNAME,
+			   DLV_TEL,
+			   DLV_ADDRESS,
+			   PIC_CONTACTNAME,
+			   PIC_TEL,
+			   PIC_ADDRESS,
+			   CC_ARRIVAL_TIME,
+			   CC_LEAVE_TIME,
+			   CC_CODE,
+			   TRANSPORT_MODE,
+			   ORDER_INFO_TYPE,
+			   NEW_ORDER_ID,
+			   DISPOSED_STATUS,
+			   SHIPPERS_CONFIRM_STATUS,
+			   PO_NO,
+			   CLAIM_GOODS_TIME,
+			   PUS_STATUS)
+			values
+			  (   #{id,jdbcType=INTEGER},#{orderCode,jdbcType=VARCHAR}, #{transportCode,jdbcType=VARCHAR}, 
+			      #{customerId,jdbcType=INTEGER}, to_date(#{pickup_time,jdbcType=VARCHAR},'yyyy-MM-dd hh24:mi:ss'), to_date(#{delivery_time,jdbcType=VARCHAR},'yyyy-MM-dd hh24:mi:ss'), 
+			      #{pickupLocationId,jdbcType=INTEGER}, #{deliveryLocationId,jdbcType=INTEGER}, #{carrierId,jdbcType=INTEGER}, 
+			      #{orderType,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, #{orderPublishedTime,jdbcType=VARCHAR}, 
+			      #{orderSchedulingTime,jdbcType=VARCHAR}, #{orderShippingTime,jdbcType=VARCHAR}, 
+			      #{orderCompleteTime,jdbcType=VARCHAR}, #{userTd,jdbcType=INTEGER}, #{isLate,jdbcType=VARCHAR}, 
+			      #{createDate,jdbcType=DATE}, #{createUserId,jdbcType=INTEGER}, #{lastUpdateDate,jdbcType=DATE}, 
+			      #{lastUpdateUserId,jdbcType=INTEGER}, #{actualPickupTime,jdbcType=DATE}, #{actualDeliveryTime,jdbcType=DATE}, 
+			      #{pickupIsLate,jdbcType=VARCHAR}, #{isDamag,jdbcType=VARCHAR}, #{locMatrixEngineerId,jdbcType=INTEGER}, 
+			      #{operateType,jdbcType=VARCHAR}, #{xmlVersion,jdbcType=VARCHAR}, #{orderDate,jdbcType=DATE}, 
+			      #{docCutOffDate,jdbcType=DATE}, #{etdDate,jdbcType=DATE}, #{deliverPort,jdbcType=VARCHAR}, 
+			      #{mtiNumber,jdbcType=VARCHAR}, #{projectId,jdbcType=INTEGER}, #{orderProjectGs,jdbcType=VARCHAR}, 
+			      #{remark,jdbcType=VARCHAR}, #{fordFileName,jdbcType=VARCHAR}, #{itemId,jdbcType=INTEGER}, 
+			      #{orderPartType,jdbcType=VARCHAR}, #{orderRowNum,jdbcType=VARCHAR}, #{isConfirm,jdbcType=VARCHAR}, 
+			      #{isAddPart,jdbcType=VARCHAR}, #{isSend,jdbcType=VARCHAR}, #{pusPickupTime,jdbcType=DATE}, 
+			      #{pusDeliveryTime,jdbcType=DATE}, #{sylifeshenNum,jdbcType=VARCHAR}, #{ccLocationId,jdbcType=DECIMAL}, 
+			      #{dlvContactname,jdbcType=VARCHAR}, #{dlvTel,jdbcType=VARCHAR}, #{dlvAddress,jdbcType=VARCHAR}, 
+			      #{picContactname,jdbcType=VARCHAR}, #{picTel,jdbcType=VARCHAR}, #{picAddress,jdbcType=VARCHAR}, 
+			      #{ccArrivalTime,jdbcType=DATE}, #{ccLeaveTime,jdbcType=DATE}, #{ccCode,jdbcType=VARCHAR}, 
+			      #{transportMode,jdbcType=VARCHAR}, #{orderInfoType,jdbcType=VARCHAR}, #{newOrderId,jdbcType=VARCHAR}, 
+			      #{disposedStatus,jdbcType=VARCHAR}, #{shippersConfirmStatus,jdbcType=VARCHAR}, #{poNo,jdbcType=VARCHAR}, 
+			      #{claimGoodsTime,jdbcType=DATE}, #{pusStatus,jdbcType=VARCHAR}
+			   )
+  </insert>
+  
+  <!-- 更新订单子表中关联主表的新id -->
+  <update id="updateOrderItem" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  		update order_info_item t set t.order_info_id = #{orderInfoId} where t.id = #{id}
+  </update>
+  
+  <!-- 更新原订单子表中的qty -->
+  <update id="updateOrderItemNum" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  		update order_info_item t set t.qty = #{qty}, t.package_qty = #{packageQty}
+  		where t.order_info_id = #{orderId}
+	    and t.PART_REFERENCE = #{partReference}
+  </update>
+  
+  <!-- 查询原子表订单信息 -->
+  <select id="queryOldOrderInfo" resultMap="orderCarMap" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  		select s.* from order_info_item s
+  			where s.order_info_id = #{id}
+	    		and s.PART_REFERENCE = #{partReference}
+  </select>
+  
+  <!-- 生成拆分后的子订单信息 -->
+  <insert id="insetOrderItem" parameterType="com.adeng.compair.entity.OrderCarEntity">
+		insert into order_info_item
+			  (ID,
+			   ORDER_INFO_ID,
+			   PART_REFERENCE,
+			   PART_NAME,
+			   PACKAGE_QTY,
+			   QTY,
+			   UNIT,
+			   LENGTH,
+			   WIDTH,
+			   HEIGHT,
+			   AMOUNT_WEIGHT,
+			   SUPPLIER_CODE,
+			   SUPPLIER_NAME,
+			   REMARK,
+			   PACKAGE_CODE,
+			   REAL_QTY,
+			   SOLID_RATE,
+			   LIQUID_RATE,
+			   PART_CUBE,
+			   PALLET,
+			   FACT_PACKPAGES,
+			   TRUCK_RATE,
+			   IS_CONFIRM,
+			   WEIGHT_RATE,
+			   ASN_CODE,
+			   RECEIVE_DATE,
+			   SYLIFESHEN_NUM,
+			   VERSION_NUMBER,
+			   REAL_TAKE_NUMBER,
+			   DISPOSED_STATUS,
+			   PO_ITEM_NO,
+			   DOC_NUM,
+			   PO_NO)
+			values
+			  (   seq_order_info_item.nextval, #{orderInfoId,jdbcType=INTEGER}, #{partReference,jdbcType=VARCHAR}, 
+			      #{partName,jdbcType=VARCHAR}, #{packageQty,jdbcType=INTEGER}, #{qty,jdbcType=INTEGER}, 
+			      #{unitl,jdbcType=VARCHAR}, #{length,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
+			      #{height,jdbcType=INTEGER}, #{amountWeight,jdbcType=INTEGER}, #{supplierCode,jdbcType=VARCHAR}, 
+			      #{supplierName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{packageCode,jdbcType=VARCHAR}, 
+			      #{realQty,jdbcType=INTEGER}, #{solidRate,jdbcType=INTEGER}, #{liquidRate,jdbcType=INTEGER}, 
+			      #{partCube,jdbcType=INTEGER}, #{pallet,jdbcType=INTEGER}, #{factPackpages,jdbcType=INTEGER}, 
+			      #{truckRate,jdbcType=INTEGER}, #{isConfirm,jdbcType=VARCHAR}, #{weightRate,jdbcType=DECIMAL}, 
+			      #{asnCode,jdbcType=VARCHAR}, #{receiveDate,jdbcType=VARCHAR}, #{sylifeshenNum,jdbcType=VARCHAR}, 
+			      #{versionNumber,jdbcType=INTEGER}, #{realTakeNumber,jdbcType=INTEGER}, #{disposedStatus,jdbcType=CHAR}, 
+			      #{poItemNo,jdbcType=VARCHAR}, #{docNum,jdbcType=VARCHAR}, #{poNo,jdbcType=VARCHAR}
+			   )
+  </insert>
+  
+  <!-- 根据orderId查询对比的实体 -->
+  <select id="queryBaseOrder" resultMap="orderCarMap" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  		select * from order_info t where t.id = #{id}
+  </select>
+  
+  <!-- 根据orderCode查找最大的运输单号 -->
+  <select id="queryMaxTransportCode" resultMap="orderCarMap" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  		select max(t.transport_code) from order_info t 
+			 where t.order_code = #{orderCode}
+			 and instr(t.transport_code,'-') != 0
+  </select>
+  
+  <!-- 查询指定orderId下是否存在零件 -->
+  <select id="queryPartIsExistOrder" resultType="int" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  		select count(*) from order_info_item t
+  			where t.order_info_id = #{orderId}
+  			and t.PART_REFERENCE in 
+  			<foreach item="item" collection="partNos" index="index" open="("  
+                separator="," close=")">  
+                #{item}  
+         </foreach>
+  </select>
+  
+  <!-- 查询订单主表中同orderCode的记录条数 -->
+  <select id="queryOrderCountByOrderCode" resultType="int" parameterType="com.adeng.compair.entity.OrderCarEntity">
+  		select count(t.id) from order_info t where t.order_code = #{orderCode}
+  </select>
+  
+  <!-- 更新子表中原orderId下满足零件号的orderId -->
+  <update id="updateOrderItemId">
+  		update order_info_item t set t.order_info_id = #{id} 
+  			where t.order_info_id = #{orderId}
+  			and t.PART_REFERENCE in 
+  			<foreach item="item" collection="partNos" index="index" open="("  
+                separator="," close=")">  
+                #{item}  
+        	</foreach>
+  </update>
+  
+  <!-- 查询trip表中按车次站点提货时间的顺序 -->
+  <select id="queryBookSheetTrip" resultMap="booksheetTripMap" parameterType="com.adeng.compair.entity.BookSheetTrip">
+  		select a.id,
+	         row_number() over(partition by a.pickup_location_id order by a.pickup_arrive_time) seq
+	    from book_sheet_trip a
+	   where a.book_sheet_id = #{bookingSheetID}
+  </select>
+  
+  <!-- 更新trip表中seq字段值 -->
+  <update id="updateTripSeq" parameterType="com.adeng.compair.entity.BookSheetTrip">
+  		update book_sheet_trip set seq = #{seq}
+  			where id = #{id}
+  </update>
+</mapper>
