@@ -104,15 +104,6 @@ public class InvokeServiceImpl implements InvokeService {
 			}
 
 			boolean flag = true;
-//			// 订单零件数量是否>车次零件数量标志
-//			boolean numIsBig = false;
-//			// 订单零件条数是否>车次零件条数标志
-//			boolean itemIsBig = false;
-//			String msg = "";
-//			// 订单零件条数>车次零件条数的订单号集合
-//			List<Map<String, String>> itemOrderCode = new ArrayList<Map<String, String>>();
-//			// 订单零件数>车次零件数的订单号、零件号集合
-//			List<Map<String, String>> numList = new ArrayList<Map<String, String>>();
 
 			/**
 			 * 比较车次信息(sqlserver)和订单信息(oracle) 车次信息：
@@ -131,7 +122,6 @@ public class InvokeServiceImpl implements InvokeService {
 			 * 若订单子表中同订单号的条数>车次子表查出的同订单号的条数，则拆主单，一拆为二， 保留订单子表中与车次那相同的零件信息，多余的关联新增主单
 			 */
 
-//			DataSourceTypeManager.set(DataSources.SQLSERVER.name());
 			// orderId集合 最后存路单相关信息时使用
 			Set<Integer> orderIdList = new HashSet<Integer>();
 			
@@ -191,10 +181,10 @@ public class InvokeServiceImpl implements InvokeService {
 								isExist = true;
 								break;
 							}
-							
-							if(!flag) {
-								break;
-							}
+						}
+						
+						if(!flag) {
+							break;
 						}
 						
 						if(!isExist) {
@@ -204,6 +194,10 @@ public class InvokeServiceImpl implements InvokeService {
 						}
 						
 						sqlserverPartList.add(s.getPartReference());
+					}
+					
+					if(!flag) {
+						break;
 					}
 					
 					//记录条目数需要拆单的零件号
@@ -326,17 +320,18 @@ public class InvokeServiceImpl implements InvokeService {
 							oracleService.updateOrderItemNum(oldOrder);
 						}
 						
-//						if(!flag) {
-//							break;
-//						}
+						if(!flag) {
+							break;
+						}
 					}
 					
-//					if(!flag) {
-//						break;
-//					}
+					if(!flag) {
+						break;
+					}
 				}
 				
 				if(!flag) {
+					System.out.println("比对数据出现问题，订单表事务回滚了。。。。");
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					continue;
 				}
@@ -345,6 +340,7 @@ public class InvokeServiceImpl implements InvokeService {
 				c.setTruckId(truck.getId());
 				c.setIocId(ioc.getId());
 				c.setCarrierId(carrier.getId());
+				System.out.println("车次号为：" + c.getTrainNumber() + "开始保存路单");
 				// 保存路单
 				oracleService.saveBookingSheet(c);
 				Integer bookingSheetID = c.getId();
@@ -488,11 +484,13 @@ public class InvokeServiceImpl implements InvokeService {
 				
 				//假如有差错，事务回滚
 				if(!flag) {
+					System.out.println("保存路单及相关信息出现问题，订单表事务回滚了。。。。");
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					continue;
 				}
 
 				if (saveFlag) {
+					System.out.println("车次号：" + c.getTrainNumber() + " 保存成功了！");
 					// 成功 修改车次处理状态
 					logResult("2", " ", c.getExcelServerRCID());
 				}
