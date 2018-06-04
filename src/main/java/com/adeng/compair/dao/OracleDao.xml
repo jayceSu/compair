@@ -941,4 +941,11 @@
   		update book_sheet_trip set seq = #{seq}
   			where id = #{id}
   </update>
+  
+  <!-- 查询路单是否已经生成 -->
+  <select id="queryBookingSheetNum" resultType="int" parameterType="com.adeng.compair.entity.BookSheetTrip">
+  		select count(id) from booking_sheet
+  		 where id = #{bookingSheetID,jdbcType=INTEGER}
+  		 and booking_sheet_num = #{trainNumber}
+  </select>
 </mapper>

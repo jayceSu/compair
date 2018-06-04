@@ -244,4 +244,11 @@ public interface OracleDao {
 	 * @return
 	 */
 	public Ioc queryLocInfo(OrderCarEntity tempCar);
+	
+	/**
+	 * 查询路单是否已经生成
+	 * @param c
+	 * @return
+	 */
+	public int queryBookingSheetNum(OrderCarEntity c);
 }

@@ -329,4 +329,13 @@ public class OracleServiceImpl implements OracleService{
 	public Ioc queryLocInfo(OrderCarEntity tempCar) {
 		return dao.queryLocInfo(tempCar);
 	}
+	
+	/**
+	 * 查询路单是否已经生成
+	 * @param c
+	 * @return
+	 */
+	public int queryBookingSheetNum(OrderCarEntity c) {
+		return dao.queryBookingSheetNum(c);
+	}
 }

@@ -340,146 +340,181 @@ public class InvokeServiceImpl implements InvokeService {
 				c.setTruckId(truck.getId());
 				c.setIocId(ioc.getId());
 				c.setCarrierId(carrier.getId());
-				System.out.println("车次号为：" + c.getTrainNumber() + "开始保存路单");
-				// 保存路单
-				oracleService.saveBookingSheet(c);
-				Integer bookingSheetID = c.getId();
-				System.out.println("车次号为：" + c.getTrainNumber() + "保存路单成功！");
-
+				
+				//路单ID
+				Integer bookingSheetID = null;
 				// 是否都保存成功标志
 				boolean saveFlag = true;
-				// 保存路单对应订单 and 保存路单站点时间 and 修改订单状态
-				for (Integer i : orderIdList) {
-					c.setBookingSheetID(bookingSheetID);
-					c.setId(i);
+				
+				try {
+					System.out.println("车次号为：" + c.getTrainNumber() + "开始保存路单");
+					// 保存路单
+					int bs = oracleService.saveBookingSheet(c);
+					if(bs > 0) {
+						bookingSheetID = c.getId();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					saveFlag = false;
+					flag = false;
+				}
 
-					// 对比的实例
-					OrderCarEntity baseOrder = oracleService.queryBaseOrder(c);
-					baseOrder.setBookingSheetID(bookingSheetID);
-					baseOrder.setIocId(c.getIocId());
-					baseOrder.setTruckId(c.getTruckId());
+				if(bookingSheetID == null || !flag || !saveFlag) {
+					saveFlag = false;
+					logResult("3", "车次号为：" + c.getTrainNumber() + "保存至路单失败", c.getExcelServerRCID());
+					flag = false;
+					System.out.println("车次号为：" + c.getTrainNumber() + "保存路单失败！");
+				}else {
+					System.out.println("车次号为：" + c.getTrainNumber() + "保存路单成功！");
+					// 保存路单对应订单  and 保存路单站点时间  and 修改订单状态
+					for (Integer i : orderIdList) {
+						c.setBookingSheetID(bookingSheetID);
+						c.setId(i);
 
-					int isExist = oracleService.queryCountBookingSheetOrder(c);
-					if (isExist > 0) {
-						saveFlag = false;
-						logResult("3", "订单号为：" + c.getOrderCode() + "的订单信息已存在路单表中，保存至路单对应订单表失败", c.getExcelServerRCID());
-						flag = false;
-						break;
-					}
-					// 保存路单对应订单
-					oracleService.saveBookingSheetOrder(c);
-					Date now = new Date();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						// 对比的实例
+						OrderCarEntity baseOrder = oracleService.queryBaseOrder(c);
+						baseOrder.setBookingSheetID(bookingSheetID);
+						baseOrder.setIocId(c.getIocId());
+						baseOrder.setTruckId(c.getTruckId());
 
-					// 手动设下orderCode
-					c.setOrderCode(baseOrder.getOrderCode());
-					OrderCarEntity tempCar = sqlserverService.queryTempCarInfo(c);
-					if (tempCar != null) {
-						Date planTime = null; //ex子表计划提货时间
-						Date requireTime = null; //ex子表需求时间
-						
-						if (!StringUtils.isEmpty(tempCar.getUnloadingPoint())) {
-							Ioc ioc2 = oracleService.queryLocInfo(tempCar);
-							if(ioc2 != null && ioc2.getId() != null && !"".equals(ioc2.getId()+"")) {
-								baseOrder.setDeliveryLocationId(ioc2.getId());
-//								System.out.println(tempCar.getUnloadingPoint());
-//								System.out.println(ioc2.getId());
-							}
-						}
-						
-						if (!StringUtils.isEmpty(tempCar.getPlannedPickUpTime())) {
-							try {
-								planTime = sdf.parse(tempCar.getPlannedPickUpTime());
-								if (!planTime.before(now)) {
-									baseOrder.setPickup_time(tempCar.getPlannedPickUpTime());
-//									System.out.println(tempCar.getPlannedPickUpTime());
-								}
-							} catch (ParseException e) {
-								e.printStackTrace();
-								saveFlag = false;
-								logResult("3", "订单号为：" + c.getOrderCode() + " 的订单在保存至路单站点时间表前的提货时间校验出错", c.getExcelServerRCID());
-								flag = false;
-								break;
-							}
-						}
-						
-						if (!StringUtils.isEmpty(tempCar.getRequiredTime())) {
-							try {
-								requireTime = sdf.parse(tempCar.getRequiredTime());
-								if(!requireTime.before(now)) {
-									baseOrder.setDelivery_time(tempCar.getRequiredTime());
-//									System.out.println(tempCar.getRequiredTime());
-								}
-							} catch (ParseException e) {
-								e.printStackTrace();
-								saveFlag = false;
-								logResult("3", "订单号为：" + c.getOrderCode() + "的订单在保存至路单站点时间表前的卸货时间校验出错", c.getExcelServerRCID());
-								flag = false;
-								break;
-							}
-						}
-						
-					}
-					
-					//校验提货时间和卸货时间
-					if("".equals(baseOrder.getPickup_time()) || null == baseOrder.getPickup_time() ||
-							"".equals(baseOrder.getDelivery_time()) || null == baseOrder.getDelivery_time()) {
-						saveFlag = false;
-						logResult("3", "订单号为：" + c.getOrderCode() + "的订单提货时间或卸货时间为空", c.getExcelServerRCID());
-						flag = false;
-						break;
-					}
-					
-					Date pickTime = null;
-					Date deliveryTime = null;
-					try {
-						pickTime = sdf.parse(baseOrder.getPickup_time());
-						deliveryTime = sdf.parse(baseOrder.getDelivery_time());
-						
-					} catch (ParseException e) {
-						e.printStackTrace();
-						saveFlag = false;
-						logResult("3", "订单号为：" + c.getOrderCode() + "的订单在校验提货时间/卸货时间出错", c.getExcelServerRCID());
-						flag = false;
-						break;
-					}
-					
-					if(pickTime.before(now) || deliveryTime.before(now)){
-						saveFlag = false;
-						logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间/提货时间早于当前时间", c.getExcelServerRCID());
-						flag = false;
-						break;
-					}else {
-						if(deliveryTime.before(pickTime)) {
+						int isExist = oracleService.queryCountBookingSheetOrder(c);
+						if (isExist > 0) {
 							saveFlag = false;
-							logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间早于提货时间", c.getExcelServerRCID());
+							logResult("3", "车次号为：" + c.getTrainNumber() +" 订单ID为：" + i + "的订单信息已存在路单表中，保存至路单对应订单表失败", c.getExcelServerRCID());
 							flag = false;
 							break;
 						}
+						
+						try {
+							// 保存路单对应订单
+							oracleService.saveBookingSheetOrder(c);
+						} catch (Exception e) {
+							e.printStackTrace();
+							saveFlag = false;
+							logResult("3", "车次号为：" + c.getTrainNumber() +" 订单ID为：" + i + "的订单信息保存至路单对应订单表失败", c.getExcelServerRCID());
+							flag = false;
+							break;
+						}
+						
+						
+						Date now = new Date();
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+						// 手动设下orderCode
+						c.setOrderCode(baseOrder.getOrderCode());
+						OrderCarEntity tempCar = sqlserverService.queryTempCarInfo(c);
+						if (tempCar != null) {
+							Date planTime = null; //ex子表计划提货时间
+							Date requireTime = null; //ex子表需求时间
+							
+							if (!StringUtils.isEmpty(tempCar.getUnloadingPoint())) {
+								Ioc ioc2 = oracleService.queryLocInfo(tempCar);
+								if(ioc2 != null && ioc2.getId() != null && !"".equals(ioc2.getId()+"")) {
+									baseOrder.setDeliveryLocationId(ioc2.getId());
+								}
+							}
+							
+							if (!StringUtils.isEmpty(tempCar.getPlannedPickUpTime())) {
+								try {
+									planTime = sdf.parse(tempCar.getPlannedPickUpTime());
+									if (!planTime.before(now)) {
+										baseOrder.setPickup_time(tempCar.getPlannedPickUpTime());
+									}
+								} catch (ParseException e) {
+									e.printStackTrace();
+									saveFlag = false;
+									logResult("3", "订单号为：" + c.getOrderCode() + " 的订单在保存至路单站点时间表前的提货时间校验出错", c.getExcelServerRCID());
+									flag = false;
+									break;
+								}
+							}
+							
+							if (!StringUtils.isEmpty(tempCar.getRequiredTime())) {
+								try {
+									requireTime = sdf.parse(tempCar.getRequiredTime());
+									if(!requireTime.before(now)) {
+										baseOrder.setDelivery_time(tempCar.getRequiredTime());
+									}
+								} catch (ParseException e) {
+									e.printStackTrace();
+									saveFlag = false;
+									logResult("3", "订单号为：" + c.getOrderCode() + "的订单在保存至路单站点时间表前的卸货时间校验出错", c.getExcelServerRCID());
+									flag = false;
+									break;
+								}
+							}
+							
+						}
+						
+						//校验提货时间和卸货时间
+						if("".equals(baseOrder.getPickup_time()) || null == baseOrder.getPickup_time() ||
+								"".equals(baseOrder.getDelivery_time()) || null == baseOrder.getDelivery_time()) {
+							saveFlag = false;
+							logResult("3", "订单号为：" + c.getOrderCode() + "的订单提货时间或卸货时间为空", c.getExcelServerRCID());
+							flag = false;
+							break;
+						}
+						
+						Date pickTime = null;
+						Date deliveryTime = null;
+						try {
+							pickTime = sdf.parse(baseOrder.getPickup_time());
+							deliveryTime = sdf.parse(baseOrder.getDelivery_time());
+							
+						} catch (ParseException e) {
+							e.printStackTrace();
+							saveFlag = false;
+							logResult("3", "订单号为：" + c.getOrderCode() + "的订单在校验提货时间/卸货时间出错", c.getExcelServerRCID());
+							flag = false;
+							break;
+						}
+						
+						if(pickTime.before(now) || deliveryTime.before(now)){
+							saveFlag = false;
+							logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间/提货时间早于当前时间", c.getExcelServerRCID());
+							flag = false;
+							break;
+						}else {
+							if(deliveryTime.before(pickTime)) {
+								saveFlag = false;
+								logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间早于提货时间", c.getExcelServerRCID());
+								flag = false;
+								break;
+							}
+						}
+						
+						baseOrder.setStartingLocation(c.getStartingLocation());
+						baseOrder.setTaskStartTime(c.getTaskStartTime());
+						baseOrder.setTaskEndTime(c.getTaskEndTime());
+
+						try {
+							// 保存路单站点时间
+							oracleService.saveBookingSheetTrip(baseOrder);
+						} catch (Exception e) {
+							e.printStackTrace();
+							saveFlag = false;
+							logResult("3", "订单号为：" + c.getOrderCode() + "的订单信息保存至路单站点时间表失败", c.getExcelServerRCID());
+							flag = false;
+							break;
+						}
+
+						// 修改订单状态
+						oracleService.UpdateOrderType(i);
 					}
 					
-					baseOrder.setStartingLocation(c.getStartingLocation());
-					baseOrder.setTaskStartTime(c.getTaskStartTime());
-					baseOrder.setTaskEndTime(c.getTaskEndTime());
-
 					try {
-						// 保存路单站点时间
-						oracleService.saveBookingSheetTrip(baseOrder);
-					} catch (Exception e) {
+						//更新trip表中的seq顺序
+						List<BookSheetTrip> tripList = oracleService.queryBookSheetTrip(c);
+						for(BookSheetTrip trip : tripList) {
+							oracleService.updateTripSeq(trip);
+						}
+					}catch(Exception e) {
 						e.printStackTrace();
 						saveFlag = false;
 						logResult("3", "订单号为：" + c.getOrderCode() + "的订单信息保存至路单站点时间表失败", c.getExcelServerRCID());
 						flag = false;
 						break;
 					}
-
-					// 修改订单状态
-					oracleService.UpdateOrderType(i);
-				}
-				//更新trip表中的seq顺序
-				List<BookSheetTrip> tripList = oracleService.queryBookSheetTrip(c);
-				for(BookSheetTrip trip : tripList) {
-					oracleService.updateTripSeq(trip);
 				}
 				
 				//假如有差错，事务回滚
@@ -489,10 +524,23 @@ public class InvokeServiceImpl implements InvokeService {
 					continue;
 				}
 
-				if (saveFlag) {
-					System.out.println("车次号：" + c.getTrainNumber() + " 保存成功了！");
-					// 成功 修改车次处理状态
-					logResult("2", " ", c.getExcelServerRCID());
+				if (flag && saveFlag && bookingSheetID != null) {
+					c.setBookingSheetID(bookingSheetID);
+					//通过车次号和路单ID查询路单是否存在
+					int bsNum = oracleService.queryBookingSheetNum(c);
+					if(bsNum == 0) {
+						System.out.println("路单未生成，订单表事务回滚了。。。。");
+						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+						logResult("3", "车次号为：" + c.getTrainNumber() + "路单未生成", c.getExcelServerRCID());
+					}else {
+						System.out.println("车次号：" + c.getTrainNumber() + " 保存成功了！");
+						// 成功 修改车次处理状态
+						logResult("2", " ", c.getExcelServerRCID());
+					}
+				}else {
+					System.out.println("保存路单及相关信息出现问题，订单表事务回滚了。。。。");
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					logResult("3", "车次号为：" + c.getTrainNumber() + "路单未生成", c.getExcelServerRCID());
 				}
 			}
 		}
