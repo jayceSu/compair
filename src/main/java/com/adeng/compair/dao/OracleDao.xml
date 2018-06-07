@@ -896,7 +896,7 @@
   
   <!-- 根据orderCode查找最大的运输单号 -->
   <select id="queryMaxTransportCode" resultMap="orderCarMap" parameterType="com.adeng.compair.entity.OrderCarEntity">
-  		select max(t.transport_code) from order_info t 
+  		select max(t.transport_code) transport_code from order_info t 
 			 where t.order_code = #{orderCode}
 			 and instr(t.transport_code,'-') != 0
   </select>

@@ -13,9 +13,12 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.adeng.compair.entity.BookSheetTrip;
 import com.adeng.compair.entity.BookingSheet;
@@ -36,10 +39,28 @@ public class InvokeServiceImpl implements InvokeService {
 
 	@Resource(name = "sqlserverService")
 	private SqlServerService sqlserverService;
+	
+	@Resource(name="otransactionManager")  
+    private DataSourceTransactionManager otransactionManager; 
+	
+	//测试事务方法
+//	public void testAffair() {
+//		DefaultTransactionDefinition def = new DefaultTransactionDefinition();  
+//		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW); // 事物隔离级别，开启新事务，这样会比较安全些。  
+//		TransactionStatus status = otransactionManager.getTransaction(def); // 获得事务状态 
+//		oracleService.UpdateOrderType(1219);
+//		try {
+//			oracleService.UpdateOrderType2(1220);
+//		} catch (Exception e) {
+//			otransactionManager.rollback(status);
+//		}
+//	}
 
 	@Override
 	@Transactional(value = "otransactionManager")
 	public void dealOrder() {
+		DefaultTransactionDefinition def = null;
+		
 		// 查询车次主表中所有符合条件的车次信息
 		List<OrderCarEntity> car = sqlserverService.queryMainCar();
 		log.info("===================本次需操作的车次数：" + car.size() +" ======================");
@@ -52,9 +73,13 @@ public class InvokeServiceImpl implements InvokeService {
 		Carrier carrier = null;
 		
 		for (OrderCarEntity c : car) {
+			def = new DefaultTransactionDefinition();  
+			def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW); // 事物隔离级别，开启新事务，这样会比较安全些。  
+			TransactionStatus status = otransactionManager.getTransaction(def); // 获得事务状态 
+			
 			log.info("===================车次号：" + c.getTrainNumber() +" ======================");
 			log.info("===================ExcelServerRCID：" + c.getExcelServerRCID() +" ======================");
-//			DataSourceTypeManager.set(DataSources.ORACLE.name());
+			
 			// 校验车牌是否存在
 			if (StringUtils.isEmpty(c.getPlanLicensePlateNumber())) {
 				logResult("3", "车牌不存在", c.getExcelServerRCID());
@@ -188,7 +213,7 @@ public class InvokeServiceImpl implements InvokeService {
 						}
 						
 						if(!isExist) {
-							logResult("3", "订单号:" + c.getOrderCode() + "，零件号：" + s.getPartReference() + "在订单表中不存在", c.getExcelServerRCID());
+							logResult("3", "订单号:" + c.getOrderCode() + "，零件号：" + s.getPartReference() + "在订单表中不存在或零件数量为0", c.getExcelServerRCID());
 							flag = false;
 							break;
 						}
@@ -249,7 +274,9 @@ public class InvokeServiceImpl implements InvokeService {
 									o.setTransportCode(o.getTransportCode() + "-1");
 								}else if(num > 1) {
 									OrderCarEntity transport = oracleService.queryMaxTransportCode(o);
-									o.setTransportCode(Integer.parseInt(transport.getTransportCode().substring(transport.getTransportCode().indexOf("-"))+1) + "");
+									String transportName = transport.getTransportCode().substring(0, transport.getTransportCode().indexOf("-")+1);
+									int transportIndex = Integer.parseInt(transport.getTransportCode().substring(transport.getTransportCode().indexOf("-")+1)) + 1;
+									o.setTransportCode(transportName + transportIndex);
 								}
 								//新增主单
 								oracleService.insertNewOrder(o);
@@ -332,7 +359,8 @@ public class InvokeServiceImpl implements InvokeService {
 				
 				if(!flag) {
 					System.out.println("比对数据出现问题，订单表事务回滚了。。。。");
-					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					otransactionManager.rollback(status);
 					continue;
 				}
 				
@@ -353,6 +381,7 @@ public class InvokeServiceImpl implements InvokeService {
 					if(bs > 0) {
 						bookingSheetID = c.getId();
 					}
+					System.out.println("路单ID为：" + bookingSheetID);
 				} catch (Exception e) {
 					e.printStackTrace();
 					saveFlag = false;
@@ -365,9 +394,11 @@ public class InvokeServiceImpl implements InvokeService {
 					flag = false;
 					System.out.println("车次号为：" + c.getTrainNumber() + "保存路单失败！");
 				}else {
-					System.out.println("车次号为：" + c.getTrainNumber() + "保存路单成功！");
+					int ind = 0;
 					// 保存路单对应订单  and 保存路单站点时间  and 修改订单状态
 					for (Integer i : orderIdList) {
+						ind ++;
+						System.out.println("路单关联的订单ID：" + i);
 						c.setBookingSheetID(bookingSheetID);
 						c.setId(i);
 
@@ -397,15 +428,15 @@ public class InvokeServiceImpl implements InvokeService {
 						}
 						
 						
-						Date now = new Date();
+//						Date now = new Date();
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 						// 手动设下orderCode
 						c.setOrderCode(baseOrder.getOrderCode());
 						OrderCarEntity tempCar = sqlserverService.queryTempCarInfo(c);
 						if (tempCar != null) {
-							Date planTime = null; //ex子表计划提货时间
-							Date requireTime = null; //ex子表需求时间
+//							Date planTime = null; //ex子表计划提货时间
+//							Date requireTime = null; //ex子表需求时间
 							
 							if (!StringUtils.isEmpty(tempCar.getUnloadingPoint())) {
 								Ioc ioc2 = oracleService.queryLocInfo(tempCar);
@@ -415,33 +446,37 @@ public class InvokeServiceImpl implements InvokeService {
 							}
 							
 							if (!StringUtils.isEmpty(tempCar.getPlannedPickUpTime())) {
-								try {
-									planTime = sdf.parse(tempCar.getPlannedPickUpTime());
-									if (!planTime.before(now)) {
-										baseOrder.setPickup_time(tempCar.getPlannedPickUpTime());
-									}
-								} catch (ParseException e) {
-									e.printStackTrace();
-									saveFlag = false;
-									logResult("3", "订单号为：" + c.getOrderCode() + " 的订单在保存至路单站点时间表前的提货时间校验出错", c.getExcelServerRCID());
-									flag = false;
-									break;
-								}
+								baseOrder.setPickup_time(tempCar.getPlannedPickUpTime());
+								//以下注释是因为解除时间的判断
+//								try {
+//									planTime = sdf.parse(tempCar.getPlannedPickUpTime());
+//									if (!planTime.before(now)) {
+//										baseOrder.setPickup_time(tempCar.getPlannedPickUpTime());
+//									}
+//								} catch (ParseException e) {
+//									e.printStackTrace();
+//									saveFlag = false;
+//									logResult("3", "订单号为：" + c.getOrderCode() + " 的订单在保存至路单站点时间表前的提货时间校验出错", c.getExcelServerRCID());
+//									flag = false;
+//									break;
+//								}
 							}
 							
 							if (!StringUtils.isEmpty(tempCar.getRequiredTime())) {
-								try {
-									requireTime = sdf.parse(tempCar.getRequiredTime());
-									if(!requireTime.before(now)) {
-										baseOrder.setDelivery_time(tempCar.getRequiredTime());
-									}
-								} catch (ParseException e) {
-									e.printStackTrace();
-									saveFlag = false;
-									logResult("3", "订单号为：" + c.getOrderCode() + "的订单在保存至路单站点时间表前的卸货时间校验出错", c.getExcelServerRCID());
-									flag = false;
-									break;
-								}
+								baseOrder.setDelivery_time(tempCar.getRequiredTime());
+								//以下注释是因为解除时间的判断
+//								try {
+//									requireTime = sdf.parse(tempCar.getRequiredTime());
+//									if(!requireTime.before(now)) {
+//										baseOrder.setDelivery_time(tempCar.getRequiredTime());
+//									}
+//								} catch (ParseException e) {
+//									e.printStackTrace();
+//									saveFlag = false;
+//									logResult("3", "订单号为：" + c.getOrderCode() + "的订单在保存至路单站点时间表前的卸货时间校验出错", c.getExcelServerRCID());
+//									flag = false;
+//									break;
+//								}
 							}
 							
 						}
@@ -464,24 +499,31 @@ public class InvokeServiceImpl implements InvokeService {
 						} catch (ParseException e) {
 							e.printStackTrace();
 							saveFlag = false;
-							logResult("3", "订单号为：" + c.getOrderCode() + "的订单在校验提货时间/卸货时间出错", c.getExcelServerRCID());
+							logResult("3", "订单号为：" + c.getOrderCode() + "的订单在校验提货时间或卸货时间出错", c.getExcelServerRCID());
 							flag = false;
 							break;
 						}
 						
-						if(pickTime.before(now) || deliveryTime.before(now)){
+						if(deliveryTime.before(pickTime)) {
 							saveFlag = false;
-							logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间/提货时间早于当前时间", c.getExcelServerRCID());
+							logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间早于提货时间", c.getExcelServerRCID());
 							flag = false;
 							break;
-						}else {
-							if(deliveryTime.before(pickTime)) {
-								saveFlag = false;
-								logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间早于提货时间", c.getExcelServerRCID());
-								flag = false;
-								break;
-							}
 						}
+						//以下注释是因为解除时间的判断
+//						if(pickTime.before(now) || deliveryTime.before(now)){
+//							saveFlag = false;
+//							logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间/提货时间早于当前时间", c.getExcelServerRCID());
+//							flag = false;
+//							break;
+//						}else {
+//							if(deliveryTime.before(pickTime)) {
+//								saveFlag = false;
+//								logResult("3", "订单号为：" + c.getOrderCode() + "的订单的卸货时间早于提货时间", c.getExcelServerRCID());
+//								flag = false;
+//								break;
+//							}
+//						}
 						
 						baseOrder.setStartingLocation(c.getStartingLocation());
 						baseOrder.setTaskStartTime(c.getTaskStartTime());
@@ -515,12 +557,21 @@ public class InvokeServiceImpl implements InvokeService {
 						flag = false;
 						break;
 					}
+					
+					if(ind > 0) {
+						System.out.println("保存信息至路单相关信息表了！");
+					}else {
+						System.out.println("未有订单信息！");
+						saveFlag = false;
+						flag = false;
+					}
 				}
 				
 				//假如有差错，事务回滚
 				if(!flag) {
 					System.out.println("保存路单及相关信息出现问题，订单表事务回滚了。。。。");
-					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					otransactionManager.rollback(status);
 					continue;
 				}
 
@@ -530,16 +581,20 @@ public class InvokeServiceImpl implements InvokeService {
 					int bsNum = oracleService.queryBookingSheetNum(c);
 					if(bsNum == 0) {
 						System.out.println("路单未生成，订单表事务回滚了。。。。");
-						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+						otransactionManager.rollback(status);
 						logResult("3", "车次号为：" + c.getTrainNumber() + "路单未生成", c.getExcelServerRCID());
 					}else {
+						System.out.println("车次号为：" + c.getTrainNumber() + "保存路单成功！");
 						System.out.println("车次号：" + c.getTrainNumber() + " 保存成功了！");
+						otransactionManager.commit(status);
 						// 成功 修改车次处理状态
 						logResult("2", " ", c.getExcelServerRCID());
 					}
 				}else {
 					System.out.println("保存路单及相关信息出现问题，订单表事务回滚了。。。。");
-					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					otransactionManager.rollback(status);
 					logResult("3", "车次号为：" + c.getTrainNumber() + "路单未生成", c.getExcelServerRCID());
 				}
 			}
