@@ -24,13 +24,13 @@ public class GenerateRoadListScheduled {
 
 //	@Scheduled(cron = "0/5 * * * * ? ") // 间隔5秒执行
 	public void invokeDealDataInteface() {
-		log.info("########################################## 进入任务调度了 ########################################## ");
-		Date beforeDate = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		log.info("########################################## 进入任务时间为：" + sdf.format(beforeDate) + " ##########################################");
-		service.dealOrder();
-		Date afterDate = new Date();
-		log.info("########################################## 完成任务时间为：" + sdf.format(afterDate) + " ##########################################");
-		log.info("########################################## 完成任务调度 ########################################## ");
+//		log.info("########################################## 进入任务调度了 ########################################## ");
+//		Date beforeDate = new Date();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		log.info("########################################## 进入任务时间为：" + sdf.format(beforeDate) + " ##########################################");
+//		service.dealOrder();
+//		Date afterDate = new Date();
+//		log.info("########################################## 完成任务时间为：" + sdf.format(afterDate) + " ##########################################");
+//		log.info("########################################## 完成任务调度 ########################################## ");
 	}
 }

@@ -12,9 +12,9 @@ public class MainApp {
 	
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception {
-        new ClassPathXmlApplicationContext("spring-mvc.xml");  
-        InvokeService service = (InvokeService) ApplicationContextUtils.getBean("invokeService");
-        service.dealOrder();
+//        new ClassPathXmlApplicationContext("spring-mvc.xml");  
+//        InvokeService service = (InvokeService) ApplicationContextUtils.getBean("invokeService");
+//        service.dealOrder();
 	}
 	
 //		deletefile("E:\\bussiness-workspace\\rabbish");
