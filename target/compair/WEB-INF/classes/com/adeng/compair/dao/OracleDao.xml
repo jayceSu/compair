@@ -896,7 +896,7 @@
   
   <!-- 根据orderCode查找最大的运输单号 -->
   <select id="queryMaxTransportCode" resultMap="orderCarMap" parameterType="com.adeng.compair.entity.OrderCarEntity">
-  		select max(t.transport_code) from order_info t 
+  		select max(t.transport_code) transport_code from order_info t 
 			 where t.order_code = #{orderCode}
 			 and instr(t.transport_code,'-') != 0
   </select>
@@ -941,4 +941,11 @@
   		update book_sheet_trip set seq = #{seq}
   			where id = #{id}
   </update>
+  
+  <!-- 查询路单是否已经生成 -->
+  <select id="queryBookingSheetNum" resultType="int" parameterType="com.adeng.compair.entity.BookSheetTrip">
+  		select count(id) from booking_sheet
+  		 where id = #{bookingSheetID,jdbcType=INTEGER}
+  		 and booking_sheet_num = #{trainNumber}
+  </select>
 </mapper>
